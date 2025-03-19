@@ -1,0 +1,46 @@
+
+
+Pentru o rădăcină ξ a unui polinom p(x), numărul de condiționare este definit ca:
+κ(ξ) = |ξ| * Σ(k=1 la n) |aₖ| * |ξ|^(-k) / |p'(ξ)|
+
+
+
+Numărul de condiționare a unei probleme:
+
+Definește erorile absolute: |Δx| = |x - x*| (la input) și |Δy| = |y - y*| (la output)
+Definește erorile relative: |δx| = |Δx|/|x| (la input) și |δy| = |Δy|/|y| (la output)
+Formula fundamentală: |δy| ≤ cond f(x) · |δx|
+
+
+Norme vectoriale și matriceale:
+
+Norma euclidiană: ||x||₂ = √(x₁² + ... + xₙ²)
+Norma Ceabîșev/supremum: ||x||∞ = max[|x₁|, ..., |xₙ|]
+Norma taxi/Manhattan: ||x||₁ = |x₁| + ... + |xₙ|
+Norma matriceală: ||A||ₚ = max (||Ax||ₚ / ||x||ₚ), unde x ≠ 0
+
+
+Definiția numărului de condiționare pentru diferite probleme:
+
+Pentru o funcție f: condₚ f(x) = ||Γ(x)||ₚ, unde Γ(x) este matricea Jacobian
+Pentru derivate: condₚ f(x) = (||x||ₚ · ||∂f/∂x||ₚ) / ||f(x)||ₚ
+Pentru funcții scalare: cond f(x) = |x·f'(x)/f(x)|
+
+
+Sisteme liniare:
+
+Dacă A·y = b, atunci există un singur y rezolvant când det A ≠ 0
+Pentru f(b) = A⁻¹b, numărul de condiționare este condₚ f(b) = ||A||ₚ · ||A⁻¹||ₚ / ||A⁻¹b||ₚ
+Definiția numărului de condiționare pentru o matrice: condₚ A = ||A||ₚ · ||A⁻¹||ₚ
+
+
+Ecuații polinomiale:
+
+Pentru p(x) = xⁿ + a₁xⁿ⁻¹ + ... + aₙ = 0, având ξ ca rădăcină simplă
+condₚ ξ(a) = Σ|aᵢ|·|ξ(a)|ⁿ⁻ᵢ / |ξ(a)·p'(ξ(a))|
+
+
+Definiție: Pentru o problemă cu date de intrare x și soluție y=f(x), numărul de condiționare κ(f) este definit ca:
+κ(f)(x) = lim(δx→0) [ (||δy||/||y||) / (||δx||/||x||) ]
+Adică raportul dintre eroarea relativă la ieșire și eroarea relativă la intrare. În practică, se aproximează prin:
+κ(f)(x) ≈ (||δy||/||y||) / (||δx||/||x||)
