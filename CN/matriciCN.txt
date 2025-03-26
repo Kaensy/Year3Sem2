@@ -1,0 +1,40 @@
+P = matrice identitate cu permutari
+U = partea triunghiulara superioara a metricei A
+L = multiplicatorii stocati sub diagonala si 1 pe diag
+
+PA = LU
+Ly = Pb
+Ux = y
+
+
+Interschimbare de linii pentru fiecare pivot ( daca este cazul )
+
+
+Cholesky 
+
+Pentru o matrice simetrică pozitiv definită A, vrem să găsim o matrice R triunghiulară superioară astfel încât:
+A = R^T × R ( R^T = transpusa | linii = coloane )
+
+elementele matricei R cu r_ij :
+Pentru diagonală (i = j):
+r_ii = sqrt(a_ii - suma(r_ki^2) pentru k de la 1 la i-1)
+
+Pentru elementele deasupra diagonalei (i < j):
+r_ij = (a_ij - suma(r_ki * r_kj) pentru k de la 1 la i-1) / r_ii
+
+Pentru elementele sub diagonală:
+r_ij = 0 pentru i > j
+
+R^T × y = b
+R × x = y
+
+
+
+
+
+
+A B    a b
+C D    c d
+
+Aa+Bc Ab+Bd
+Ca+Dc Cb+Dd
