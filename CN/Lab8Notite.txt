@@ -1,0 +1,209 @@
+a) Spline Complete
+
+Pentru acest tip se specifică valorile derivatelor de ordinul întâi la capete: f'(a) și f'(b)
+În cod, se apelează ca: c=splinecubic(nodes,values,'complete',[-1,1])
+Condițiile de margine: p₁'(x₁) = f'(a), pₙ₋₁'(xₙ) = f'(b)
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!! Primul nod: m₁ = f'(x₁) (derivata dată la primul nod) 	!!!! 
+!!!! Noduri interioare: aceeași formulă ca la natural 		!!!! 
+!!!! Ultimul nod: mₙ = f'(xₙ) (derivata dată la ultimul nod)	!!!! 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+b) Spline Naturale
+
+Se presupune că derivatele de ordinul doi la capete sunt zero: f''(a) = f''(b) = 0
+În cod, se apelează ca: c=splinecubic(nodes,values,'naturale')
+Condițiile de margine: p₁''(x₁) = 0, pₙ₋₁''(xₙ) = 0
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!! Primul nod: 2m₁ + m₂ = 3f[x₁,x₂]										  !!!!
+!!!! Noduri interioare (i = 2,...,n-1): Δxᵢ₋₁mᵢ₋₁ + 2(Δxᵢ₋₁+Δxᵢ)mᵢ + Δxᵢmᵢ₊₁ = 3(Δxᵢf[xᵢ₋₁,xᵢ] + Δxᵢ₋₁f[xᵢ,xᵢ₊₁]) !!!!
+!!!! Ultimul nod: mₙ₋₁ + 2mₙ = 3f[xₙ₋₁,xₙ]										  !!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+c) Spline cu Derivate Secunde (de ordinul al doilea)
+
+Se specifică valorile derivatelor de ordinul doi la capete: f''(a) și f''(b)
+În cod, se apelează ca: c=splinecubic(nodes,values,'derivate2',[1,2])
+Condițiile de margine: p₁''(x₁) = f''(a), pₙ₋₁''(xₙ) = f''(b)
+
+
+d) Spline deBoor (not-a-knot)
+
+Impune condiția că a treia derivată este continuă la al doilea și penultimul nod
+În cod, se apelează ca: c=splinecubic(nodes,values,'deBoor')
+Condițiile de margine: p₁'''(x₂) = p₂'''(x₂), pₙ₋₂'''(xₙ₋₁) = pₙ₋₁'''(xₙ₋₁)
+
+--------------------------------------------------------------------------------------------------
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!! Forma matematică a spline-ului cubic					!!!! 
+!!!! Pentru fiecare segment [xᵢ, xᵢ₊₁], spline-ul cubic are forma: 		!!!! 
+!!!! pᵢ(x) = cᵢ,₀ + cᵢ,₁(x-xᵢ) + cᵢ,₂(x-xᵢ)² + cᵢ,₃(x-xᵢ)³			!!!! 
+!!!! Unde coeficienții sunt:							!!!! 
+!!!! 										!!!! 
+!!!! cᵢ,₀ = fᵢ (valoarea funcției în nodul xᵢ)					!!!! 
+!!!! cᵢ,₁ = mᵢ (valoarea derivatei în nodul xᵢ)					!!!! 
+!!!! cᵢ,₂ = [f[xᵢ,xᵢ₊₁]-mᵢ]/Δxᵢ - cᵢ,₃Δxᵢ = [3f[xᵢ,xᵢ₊₁]-2mᵢ-mᵢ₊₁]/Δxᵢ		!!!! 
+!!!! cᵢ,₃ = [mᵢ₊₁+mᵢ-2f[xᵢ,xᵢ₊₁]]/(Δxᵢ)²					!!!! 
+!!!! 										!!!! 
+!!!! unde:									!!!! 
+!!!! 										!!!! 
+!!!! f[xᵢ,xᵢ₊₁] = (fᵢ₊₁-fᵢ)/Δxᵢ este diferența divizată				!!!! 
+!!!! Δxᵢ = xᵢ₊₁-xᵢ este pasul între noduri					!!!! 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+--------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------
+
+Problema:
+Să se determine coeficienții spline-ului cubic natural pentru datele:
+
+Noduri: x = [0, 1, 2]
+Valori: f = [1, 3, 2]
+
+Calculul diferențelor și diferențelor divizate
+Diferențele între noduri:
+
+Δx₁ = x₂ - x₁ = 1 - 0 = 1
+Δx₂ = x₃ - x₂ = 2 - 1 = 1
+
+Diferențele divizate (rata de schimbare între noduri):
+
+f[x₁,x₂] = (f(x₂) - f(x₁))/Δx₁ = (3 - 1)/1 = 2
+f[x₂,x₃] = (f(x₃) - f(x₂))/Δx₂ = (2 - 3)/1 = -1
+
+
+Pentru un spline cubic natural, condițiile la capete sunt:
+p"₁(x₁) = 0  (derivata a doua este zero la primul nod)
+p"₁(x₃) = 0  (derivata a doua este zero la ultimul nod)
+
+Pentru n = 3 noduri, avem n ecuații pentru derivatele primei în noduri (m₁, m₂, m₃):
+
+Nod interior : 
+Δxᵢ₋₁mᵢ₋₁ + 2(Δxᵢ₋₁ + Δxᵢ)mᵢ + Δxᵢmᵢ₊₁ = 3(Δxᵢf[xᵢ₋₁,xᵢ] + Δxᵢ₋₁f[xᵢ,xᵢ₊₁])
+Ultimul nod :
+mₙ₋₁ + 2mₙ = 3f[xₙ₋₁,xₙ]
+
+Pentru x₁ (condiția de spline natural): 2m₁ + m₂ = 3f[x₁,x₂]
+Pentru x₂ (nod interior): Δx₁m₁ + 2(Δx₁+Δx₂)m₂ + Δx₂m₃ = 3(Δx₂f[x₁,x₂] + Δx₁f[x₂,x₃])
+Pentru x₃ (condiția de spline natural): m₂ + 2m₃ = 3f[x₂,x₃]
+
+Înlocuind valorile:
+
+2m₁ + m₂ = 3·2 = 6
+1·m₁ + 2(1+1)·m₂ + 1·m₃ = 3(1·2 + 1·(-1)) = 3
+m₂ + 2m₃ = 3·(-1) = -3
+
+Rezolvarea sistemului ne dă:
+m₁ = 2.75
+m₂ = 0.5
+m₃ = -1.75
+
+Interval 1: [0, 1]
+c₁,₀ = f(x₁) = 1
+c₁,₁ = m₁ = 2.75
+c₁,₂ = (3f[x₁,x₂] - 2m₁ - m₂)/Δx₁ = (3·2 - 2·2.75 - 0.5)/1 = 6 - 5.5 - 0.5 = 0
+c₁,₃ = (m₁ + m₂ - 2f[x₁,x₂])/(Δx₁)² = (2.75 + 0.5 - 2·2)/1² = 3.25 - 4 = -0.75
+
+Interval 2: [1, 2]
+c₂,₀ = f(x₂) = 3
+c₂,₁ = m₂ = 0.5
+c₂,₂ = (3f[x₂,x₃] - 2m₂ - m₃)/Δx₂ = (3·(-1) - 2·0.5 - (-1.75))/1 = -3 - 1 + 1.75 = -2.25
+c₂,₃ = (m₂ + m₃ - 2f[x₂,x₃])/(Δx₂)² = (0.5 + (-1.75) - 2·(-1))/1² = -1.25 + 2 = 0.75
+
+pᵢ(x) = cᵢ,₀ + cᵢ,₁(x-xᵢ) + cᵢ,₂(x-xᵢ)² + cᵢ,₃(x-xᵢ)³
+
+p₁(x) = 1 + 2.75x - 0.75x³
+p₂(x) = 3 + 0.5(x-1) - 2.25(x-1)² + 0.75(x-1)³
+
+Verificare
+
+p₁(0) = 1 ✓
+p₁(1) = 1 + 2.75 - 0.75 = 3 ✓
+p₂(1) = 3 ✓
+p₂(2) = 3 + 0.5 - 2.25 + 0.75 = 2 ✓
+
+Spline-ul trece corect prin toate punctele!
+
+
+--------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------
+
+Problema: Să construim un spline cubic complet care trece prin punctele:
+(1, 2);(2, 1);(3, 3);(4, 2)
+cu derivatele la capete f'(1) = -1 și f'(4) = 0.
+
+x₁ = 1, f(x₁) = 2, f'(x₁) = -1 (derivată dată la capăt)
+x₂ = 2, f(x₂) = 1
+x₃ = 3, f(x₃) = 3
+x₄ = 4, f(x₄) = 2, f'(x₄) = 0 (derivată dată la capăt)
+
+Diferențele între noduri:
+
+Δx₁ = x₂ - x₁ = 2 - 1 = 1
+Δx₂ = x₃ - x₂ = 3 - 2 = 1
+Δx₃ = x₄ - x₃ = 4 - 3 = 1
+
+Diferențele divizate:
+
+f[x₁,x₂] = (f(x₂) - f(x₁))/Δx₁ = (1 - 2)/1 = -1
+f[x₂,x₃] = (f(x₃) - f(x₂))/Δx₂ = (3 - 1)/1 = 2
+f[x₃,x₄] = (f(x₄) - f(x₃))/Δx₃ = (2 - 3)/1 = -1
+
+Pentru un spline cubic complet, condițiile la capete sunt:
+
+m₁ = f'(x₁) = -1 (prima derivată la primul nod)
+m₄ = f'(x₄) = 0 (prima derivată la ultimul nod)
+
+(noduri interioare)
+x₂: Δx₁m₁ + 2(Δx₁+Δx₂)m₂ + Δx₂m₃ = 3(Δx₂f[x₁,x₂] + Δx₁f[x₂,x₃])
+x₃: Δx₂m₂ + 2(Δx₂+Δx₃)m₃ + Δx₃m₄ = 3(Δx₃f[x₂,x₃] + Δx₂f[x₃,x₄])
+
+x₂:
+1·(-1) + 2(1+1)·m₂ + 1·m₃ = 3(1·(-1) + 1·2)
+4m₂ + m₃ = 4
+
+x₃:
+1·m₂ + 2(1+1)·m₃ + 1·0 = 3(1·2 + 1·(-1))
+m₂ + 4m₃ = 3
+
+Rezolvarea sistemului 
+4m₂ + m₃ = 4
+m₂ + 4m₃ = 3
+
+m₁ = -1 (dat)
+m₂ = 13/15 ≈ 0.8667
+m₃ = 8/15 ≈ 0.5333
+m₄ = 0 (dat)
+
+Interval 1: [1, 2]
+c₁,₀ = f(x₁) = 2
+c₁,₁ = m₁ = -1
+c₁,₂ = (3f[x₁,x₂] - 2m₁ - m₂)/Δx₁ = (3·(-1) - 2·(-1) - 13/15)/1 = -3 + 2 - 13/15 = -1 - 13/15 = -28/15
+c₁,₃ = (m₁ + m₂ - 2f[x₁,x₂])/(Δx₁)² = ((-1) + 13/15 - 2·(-1))/1² = -1 + 13/15 + 2 = 1 + 13/15 = 28/15
+
+Interval 2: [2, 3]
+c₂,₀ = f(x₂) = 1
+c₂,₁ = m₂ = 13/15
+c₂,₂ = (3f[x₂,x₃] - 2m₂ - m₃)/Δx₂ = (3·2 - 2·13/15 - 8/15)/1 = 6 - 26/15 - 8/15 = 6 - 34/15 = 90/15 - 34/15 = 56/15
+c₂,₃ = (m₂ + m₃ - 2f[x₂,x₃])/(Δx₂)² = (13/15 + 8/15 - 2·2)/1² = 21/15 - 4 = 21/15 - 60/15 = -39/15
+
+Interval 3: [3, 4]
+c₃,₀ = f(x₃) = 3
+c₃,₁ = m₃ = 8/15
+c₃,₂ = (3f[x₃,x₄] - 2m₃ - m₄)/Δx₃ = (3·(-1) - 2·8/15 - 0)/1 = -3 - 16/15 = -45/15 - 16/15 = -61/15
+c₃,₃ = (m₃ + m₄ - 2f[x₃,x₄])/(Δx₃)² = (8/15 + 0 - 2·(-1))/1² = 8/15 + 2 = 8/15 + 30/15 = 38/15
+
+Pe [1, 2]:
+p₁(x) = 2 - 1(x-1) - (28/15)(x-1)² + (28/15)(x-1)³
+
+Pe [2, 3]:
+p₂(x) = 1 + (13/15)(x-2) + (56/15)(x-2)² - (39/15)(x-2)³
+
+Pe [3, 4]:
+p₃(x) = 3 + (8/15)(x-3) - (61/15)(x-3)² + (38/15)(x-3)³
+
+--------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------
