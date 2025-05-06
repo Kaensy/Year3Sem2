@@ -1,0 +1,106 @@
+Exemplul 1: Aproximare discretă polinomială
+Problema: Avem un set de date experimentale (x₁, y₁), (x₂, y₂), ..., (xₙ, yₙ) și dorim să găsim un polinom de grad 1 (o dreaptă) care să aproximeze aceste date în sensul celor mai mici pătrate.
+
+(1, 2)
+(2, 3.1)
+(3, 3.9)
+(4, 5.2)
+(5, 5.8)
+
+Definirea problemei:
+
+Căutăm un polinom de forma p(x) = a₀ + a₁x care să minimizeze suma pătratelor diferențelor: Σ[p(xᵢ) - yᵢ]²
+Aceasta este o aproximare discretă, deoarece avem doar valori discrete ale funcției.
+
+
+Stabilirea ecuațiilor normale:
+
+Ecuațiile normale sunt: (grad1)
+
+a₀·n + a₁·Σxᵢ = Σyᵢ
+a₀·Σxᵢ + a₁·Σxᵢ² = Σxᵢyᵢ
+
+
+Aceste ecuații rezultă din condiția ca derivatele parțiale ale sumei pătratelor diferențelor în raport cu a₀ și a₁ să fie zero.
+
+
+Calculul sumelor necesare:
+
+n = 5 (numărul de puncte)
+Σxᵢ = 1 + 2 + 3 + 4 + 5 = 15
+Σyᵢ = 2 + 3.1 + 3.9 + 5.2 + 5.8 = 20
+Σxᵢ² = 1² + 2² + 3² + 4² + 5² = 1 + 4 + 9 + 16 + 25 = 55
+Σxᵢyᵢ = 1·2 + 2·3.1 + 3·3.9 + 4·5.2 + 5·5.8 = 2 + 6.2 + 11.7 + 20.8 + 29 = 69.7
+
+
+Rezolvarea sistemului de ecuații:
+
+5a₀ + 15a₁ = 20
+15a₀ + 55a₁ = 69.7
+
+a₁ = 0.97
+a₀ = 1.09
+
+Polinomul de aproximare este: p(x) = 1.09 + 0.97x
+
+suma patratelor reziduurilor pt verificare ( Reziduu : y - p(x) )
+
+-------------------------------------------------------------------------------------------------------------
+
+Problemă exemplu:
+Date fiind punctele (1,0), (2,1), (3,3), (4,2):
+a) Determinați coeficienții polinomului de grad 2, p(x) = a₀ + a₁x + a₂x², care aproximează aceste date în sensul celor mai mici pătrate.
+b) Calculați suma pătratelor reziduurilor.
+Rezolvare:
+a) Formăm matricea sistemului și vectorul termenilor liberi:
+
+Matricea A are elementele: [1, xᵢ, xᵢ²]
+Vectorul b conține valorile yᵢ
+
+A = [1 1 1; 1 2 4; 1 3 9; 1 4 16]
+b = [0; 1; 3; 2]
+
+Ecuațiile normale: (A^T·A)·x = A^T·b   | x e [a₀, a₁, a₂]^T
+A^T·A = [4 10 30
+	10 30 100
+	30 100 354]
+A^T·b = [6
+	19 
+	59]
+
+4a₀ + 10a₁ + 30a₂ = 6
+10a₀ + 30a₁ + 100a₂ = 19
+30a₀ + 100a₁ + 354a₂ = 59
+
+Rezolvând sistemul: [a₀, a₁, a₂] = [-3, 2.1, -0.2]
+Deci p(x) = -3 + 2.1x - 0.2x²
+b) Calculăm reziduurile:
+r₁ = 0 - p(1) = 0 - (-3 + 2.1 - 0.2) = 0 - (-1.1) = 1.1
+r₂ = 1 - p(2) = 1 - (-3 + 4.2 - 0.8) = 1 - 0.4 = 0.6
+r₃ = 3 - p(3) = 3 - (-3 + 6.3 - 1.8) = 3 - 1.5 = 1.5
+r₄ = 2 - p(4) = 2 - (-3 + 8.4 - 3.2) = 2 - 2.2 = -0.2
+
+-------------------------------------------------------------------------------------------------------------
+
+Fie datele experimentale: (0,1), (1,3), (2,3), (3,1).
+Se dă polinomul p(x) = 1 + 2x - 0.5x². Verificați dacă acesta este polinomul de aproximare în sensul celor mai mici pătrate pentru aceste date. Dacă nu este, explicați de ce.
+Rezolvare:
+
+Formăm matricea A și vectorul b:
+A = [1 0 0; 1 1 1; 1 2 4; 1 3 9]
+b = [1; 3; 3; 1]
+Verificăm dacă p(x) = 1 + 2x - 0.5x² este soluția ecuațiilor normale:
+
+Ecuațiile normale sunt: (A^T·A)·x = A^T·b
+Coeficienții pretinși sunt: [a₀, a₁, a₂] = [1, 2, -0.5]
+
+
+Calculăm A^T·A și A^T·b:
+A^T·A = [4 6 14; 6 14 36; 14 36 98]
+A^T·b = [8; 10; 16]
+Verificăm dacă (A^T·A)·[1, 2, -0.5]^T = A^T·b:
+[4 6 14; 6 14 36; 14 36 98] · [1; 2; -0.5] = [4 + 12 - 7; 6 + 28 - 18; 14 + 72 - 49]
+= [9; 16; 37]
+Comparăm cu A^T·b = [8; 10; 16]:
+[9; 16; 37] ≠ [8; 10; 16]
+Concluzie: Polinomul dat nu este soluția problemei celor mai mici pătrate, deoarece nu satisface ecuațiile normale.
